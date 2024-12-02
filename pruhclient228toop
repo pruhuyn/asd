@@ -1,0 +1,172 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/pruhuyn/pruh1/refs/heads/main/pruhvanlav')))()
+
+OrionLib:MakeNotification({
+	Name = "PruhClient v1.1",
+	Content = "Заходите в игру на которую вы хотите загрузить скрипт, и там уже запускайте чит!",
+	Image = "rbxassetid://4483345998",
+	Time = 8
+})
+
+local Window = OrionLib:MakeWindow({Name = "Pruh Client", HidePremium = false, SaveConfig = true, ConfigFolder = "Pruh"})
+
+-- Player Tab --
+
+local PlayerTab = Window:MakeTab({
+	Name = "Игрок",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local PlayerSection = PlayerTab:AddSection({
+	Name = "Игрок"
+})
+
+PlayerSection:AddSlider({
+	Name = "Скорость",
+	Min = 16,
+	Max = 100,
+	Default = 5,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "Walkspeed",
+	Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+	end    
+})
+
+-- Settings Tab --
+
+local SettingsTab = Window:MakeTab({
+	Name = "Settings",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local SettingsSection = SettingsTab:AddSection({
+	Name = "Настройки"
+})
+
+SettingsSection:AddButton({
+	Name = "Скрыть чит",
+	Callback = function()
+        OrionLib:Destroy()
+  	end    
+})
+
+local SettingsTab = Window:MakeTab({
+	Name = "Bss",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+if game.PlaceId == 1537690962 then
+
+local SettingsSection = SettingsTab:AddSection({
+	Name = "Bee Swarm Simulator"
+})
+
+SettingsSection:AddButton({
+	Name = "Gui1",
+	Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/VerbalHubz/Verbal-Hub/refs/heads/main/Bee%20Swarm%20Sim.Lua',true))()
+  	end    
+})
+
+end
+
+if game.PlaceId == 2809202155 then
+
+-- Yba Tab --
+
+local YbaTab = Window:MakeTab({
+    Name = "Yba",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+local YbaSection = YbaTab:AddSection({
+    Name = "Yba"
+})
+
+YbaSection:AddButton({
+    Name = "Fly",
+    Callback = function()
+        -- Начало скрипта для полета
+        print("Home = Вкл\выкл платформы, Insert = Up, L = down")
+        local player = game.Players.LocalPlayer
+        local platform = nil -- Переменная для платформы
+        local platformActive = false -- Флаг для активации платформы
+        local platformOffset = -3 -- Начальная высота платформы относительно игрока
+
+        -- Функция для создания платформы под игроком
+        local function createPlatform()
+            if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
+                return
+            end
+
+            -- Удаляем старую платформу, если она есть
+            if platform then
+                platform:Destroy()
+            end
+
+            -- Создаем новую платформу
+            platform = Instance.new("Part")
+            platform.Size = Vector3.new(5, 1, 5) -- Размер платформы
+            platform.Position = player.Character.HumanoidRootPart.Position + Vector3.new(0, platformOffset, 0) -- Расположение под игроком
+            platform.Anchored = true -- Фиксируем платформу
+            platform.CanCollide = true -- Платформа имеет физические свойства
+            platform.Transparency = 0.5 -- Полупрозрачная для наглядности
+            platform.Parent = workspace -- Добавляем в пространство
+
+            -- Следим за движением персонажа
+            game:GetService("RunService").RenderStepped:Connect(function()
+                if platformActive and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                    local humanoidRootPart = player.Character.HumanoidRootPart
+                    platform.Position = humanoidRootPart.Position + Vector3.new(0, platformOffset, 0) -- Следуем за персонажем
+                end
+            end)
+        end
+
+        -- Удаляем платформу после смерти игрока
+        player.CharacterAdded:Connect(function()
+            if platform then
+                platform:Destroy()
+                platform = nil -- Сбрасываем переменную
+            end
+            platformActive = false -- Платформа отключена
+        end)
+
+        -- Управление активацией платформы
+        local UIS = game:GetService("UserInputService")
+
+        UIS.InputBegan:Connect(function(input)
+            -- Включение/выключение платформы на клавишу Home
+            if input.KeyCode == Enum.KeyCode.Home then
+                if not platformActive then
+                    createPlatform()
+                    platformActive = true
+                else
+                    if platform then
+                        platform:Destroy()
+                        platform = nil -- Удаляем платформу
+                    end
+                    platformActive = false -- Деактивируем платформу
+                end
+            end
+
+            -- Подъем платформы на PageUp
+            if input.KeyCode == Enum.KeyCode.Insert and platformActive then
+                platformOffset = platformOffset + 1 -- Увеличиваем высоту платформы
+            end
+
+            -- Опускание платформы на PageDown
+            if input.KeyCode == Enum.KeyCode.L and platformActive then
+                platformOffset = platformOffset - 1 -- Уменьшаем высоту платформы
+            end
+        end)
+    end    
+})
+
+
+end
+OrionLib:Init() -- UI Lib End
